@@ -1,0 +1,15 @@
+server:
+  port: 8080
+  tomcat:
+    uri-encoding: utf-8
+
+spring:
+  thymeleaf:
+    mode: HTML
+    encoding: utf-8
+    cache: false
+    prefix: classpath:/templates/
+
+logging:
+  level.root: info
+  level.com.fyt.timelycommunication: debug

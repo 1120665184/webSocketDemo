@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>webSocket 测试</title>
+</head>
+<body>
+<div id="time">
+    当前服务器时间： {{time}}
+</div>
+</body>
+<script src="../static/js/vue.min.js" th:src="@{/js/vue.min.js}"></script>
+<script type="text/javascript">
+    window.onload = function () {
+        new Vue({
+            el:'#time',
+            data:function () {
+                return {
+                    socket:null,
+                    time:''
+                }
+            },
+            methods:{
+                /**
+                 * 初始化webSocket
+                 */
+                initWebSocket:function () {
+                    var _this = this;
+                    if(typeof(WebSocket) == 'undefined'){
+                        alert("浏览器不支持WebSocket")
+                    }else {
+                        _this.socket = new WebSocket("ws://localhost:8080/websocket")
+                        _this.socket.onopen = function () {
+                            console.log("Socket 连接成功")
+                        }
+                        //接受来自服务器的消息
+                        _this.socket.onmessage = function (mes) {
+                            console.log(mes)
+                            _this.time = mes.data;
+                        }
+                        _this.socket.onclose = function () {
+                            console.log("Socket 关闭")
+                        }
+                        _this.socket.onerror = function () {
+                            alert("socket 错误")
+                        }
+                    }
+                }
+            },
+            created:function () {
+                this.initWebSocket()
+            }
+        })
+    }
+</script>
+</html>
